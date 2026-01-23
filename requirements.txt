@@ -11,6 +11,7 @@ vocos
 pydub
 onnxruntime
 git+https://github.com/ysharma3501/LinaCodec.git
+librosa
 
 # Normalization
 cn2an
