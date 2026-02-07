@@ -40,7 +40,15 @@ pip install -r requirements.txt
 #### Load model:
 ```python
 from zipvoice.luxvoice import LuxTTS
-lux_tts = LuxTTS('YatharthS/LuxTTS', device='cuda', threads=2) ## change device to cpu for cpu usage
+
+# load model on GPU
+lux_tts = LuxTTS('YatharthS/LuxTTS', device='cuda')
+
+# load model on CPU
+# lux_tts = LuxTTS('YatharthS/LuxTTS', device='cpu', threads=2)
+
+# load model on MPS for macs
+# lux_tts = LuxTTS('YatharthS/LuxTTS', device='mps')
 ```
 
 #### Simple inference
@@ -119,7 +127,7 @@ A: Yes, currently it uses float32. Float16 should be significantly faster(almost
 
 - [x] Release model and code
 - [x] Huggingface spaces demo
-- [ ] Release mps support
+- [x] Release MPS support (thanks to @builtbybasit)
 - [ ] Release code for float16 inference
 
 ## Acknowledgments

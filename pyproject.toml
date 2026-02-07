@@ -5,7 +5,25 @@ description = "Linacodec is a highly compressive and rapid audio tokenizer for a
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "huggingface_hub",
+  "cn2an",
+  "huggingface-hub",
+  "inflect",
+  "jieba",
+  "lhotse",
+  "librosa",
+  "linacodec",
+  "numpy",
+  "onnxruntime",
+  "piper-phonemize",
+  "pydub",
+  "pypinyin",
+  "safetensors",
+  "setuptools<81",
+  "tensorboard",
+  "torch",
+  "torchaudio",
+  "transformers<=4.57.6",
+  "vocos",
 ]
 
 [project.optional-dependencies]
@@ -19,3 +37,12 @@ build-backend = "uv_build"
 
 [tool.ruff]
 line-length = 120
+
+[tool.uv]
+find-links = ["https://k2-fsa.github.io/icefall/piper_phonemize.html"]
+
+[tool.uv.sources]
+linacodec = { git = "https://github.com/ysharma3501/LinaCodec.git" }
+
+[tool.uv.build-backend]
+module-root = "" # The root module of the project

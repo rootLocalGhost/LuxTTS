@@ -27,6 +27,13 @@ from typing import Optional, Tuple, Union
 import torch
 from torch import Tensor, nn
 
+if torch.cuda.is_available():
+    DEVICE_TYPE = "cuda"
+elif torch.backends.mps.is_available():
+    DEVICE_TYPE = "mps"
+else:
+    DEVICE_TYPE = "cpu"
+
 from zipvoice.models.modules.scaling import (
     ActivationDropoutAndLinear,
     Balancer,
@@ -1310,7 +1317,7 @@ class RelPositionMultiheadAttentionWeights(nn.Module):
         (num_heads, batch_size, seq_len, seq_len) = attn_weights.shape
 
         with torch.no_grad():
-            with torch.amp.autocast("cuda", enabled=False):
+            with torch.amp.autocast(DEVICE_TYPE, enabled=False):
                 attn_weights = attn_weights.to(torch.float32)
                 attn_weights_entropy = (
                     -((attn_weights + 1.0e-20).log() * attn_weights)

@@ -33,10 +33,24 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
+if torch.cuda.is_available():
+    DEVICE_TYPE = "cuda"
+elif torch.backends.mps.is_available():
+    DEVICE_TYPE = "mps"
+else:
+    DEVICE_TYPE = "cpu"
+
+def get_memory_allocated():
+    if DEVICE_TYPE == "cuda":
+        return torch.cuda.memory_allocated()
+    elif DEVICE_TYPE == "mps":
+        return torch.mps.current_allocated_memory()
+    else:
+        return 0
 
 def custom_amp_decorator(dec, cuda_amp_deprecated):
     def decorator(func):
-        return dec(func) if not cuda_amp_deprecated else dec(device_type="cuda")(func)
+        return dec(func) if not cuda_amp_deprecated else dec(device_type=DEVICE_TYPE)(func)
 
     return decorator
 
@@ -319,7 +333,7 @@ class SoftmaxFunction(torch.autograd.Function):
     @staticmethod
     def backward(ctx, ans_grad: Tensor):
         (ans,) = ctx.saved_tensors
-        with torch.amp.autocast("cuda", enabled=False):
+        with torch.amp.autocast(DEVICE_TYPE, enabled=False):
             ans_grad = ans_grad.to(torch.float32)
             ans = ans.to(torch.float32)
             x_grad = ans_grad * ans
@@ -535,7 +549,7 @@ class BalancerFunction(torch.autograd.Function):
 
         try:
             with torch.enable_grad():
-                with torch.amp.autocast("cuda", enabled=False):
+                with torch.amp.autocast(DEVICE_TYPE, enabled=False):
                     x = x.to(torch.float32)
                     x = x.detach()
                     x.requires_grad = True
@@ -648,7 +662,7 @@ class Balancer(torch.nn.Module):
         if (
             torch.jit.is_scripting()
             or not x.requires_grad
-            or (x.is_cuda and self.mem_cutoff(torch.cuda.memory_allocated()))
+            or ((x.is_cuda or x.device.type == "mps") and self.mem_cutoff(get_memory_allocated()))
         ):
             return _no_op(x)
 
@@ -802,7 +816,7 @@ class WhiteningPenaltyFunction(torch.autograd.Function):
 
         try:
             with torch.enable_grad():
-                with torch.amp.autocast("cuda", enabled=False):
+                with torch.amp.autocast(DEVICE_TYPE, enabled=False):
                     x_detached = x_orig.to(torch.float32).detach()
                     x_detached.requires_grad = True
 
@@ -1046,7 +1060,7 @@ class SwooshLFunction(torch.autograd.Function):
 
         coeff = -0.08
 
-        with torch.amp.autocast("cuda", enabled=False):
+        with torch.amp.autocast(DEVICE_TYPE, enabled=False):
             with torch.enable_grad():
                 x = x.detach()
                 x.requires_grad = True
@@ -1124,7 +1138,7 @@ class SwooshRFunction(torch.autograd.Function):
 
         zero = torch.tensor(0.0, dtype=x.dtype, device=x.device)
 
-        with torch.amp.autocast("cuda", enabled=False):
+        with torch.amp.autocast(DEVICE_TYPE, enabled=False):
             with torch.enable_grad():
                 x = x.detach()
                 x.requires_grad = True
@@ -1187,7 +1201,7 @@ class SwooshROnnx(torch.nn.Module):
 # simple version of SwooshL that does not redefine the backprop, used in
 # ActivationDropoutAndLinearFunction.
 def SwooshLForward(x: Tensor):
-    with torch.amp.autocast("cuda", enabled=False):
+    with torch.amp.autocast(DEVICE_TYPE, enabled=False):
         x = x.to(torch.float32)
         x_offset = x - 4.0
         log_sum = (1.0 + x_offset.exp()).log().to(x.dtype)
@@ -1198,7 +1212,7 @@ def SwooshLForward(x: Tensor):
 # simple version of SwooshR that does not redefine the backprop, used in
 # ActivationDropoutAndLinearFunction.
 def SwooshRForward(x: Tensor):
-    with torch.amp.autocast("cuda", enabled=False):
+    with torch.amp.autocast(DEVICE_TYPE, enabled=False):
         x = x.to(torch.float32)
         x_offset = x - 1.0
         log_sum = (1.0 + x_offset.exp()).log().to(x.dtype)
