@@ -112,7 +112,13 @@ if display is not None:
 - You can use return_smooth = True if you hear metallic sounds.
 - Lower t_shift for less possible pronunciation errors but worse quality and vice versa.
 
-  
+## Community
+- [Lux-TTS-Gradio](https://github.com/NidAll/LuxTTS-Gradio): A gradio app to use LuxTTS.
+- [OptiSpeech](https://github.com/ycharfi09/OptiClone): Clean UI app to use LuxTTS.
+- [LuxTTS-Comfyui](https://github.com/DragonDiffusionbyBoyo/BoyoLuxTTS-Comfyui.git): Nodes to use LuxTTS in comfyui.
+
+Thanks to all community contributions!
+
 ## Info
 
 Q: How is this different from ZipVoice?
