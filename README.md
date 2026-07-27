@@ -116,6 +116,8 @@ if display is not None:
 - [Lux-TTS-Gradio](https://github.com/NidAll/LuxTTS-Gradio): A gradio app to use LuxTTS.
 - [OptiSpeech](https://github.com/ycharfi09/OptiClone): Clean UI app to use LuxTTS.
 - [LuxTTS-Comfyui](https://github.com/DragonDiffusionbyBoyo/BoyoLuxTTS-Comfyui.git): Nodes to use LuxTTS in comfyui.
+- [FalAI hosting](https://fal.ai/models/fal-ai/lux-tts): Luxtts demo hosted by FalAI
+- [Lux-TTS ONNX](https://github.com/ningyos/luxtts-onnx): Onnx code to use luxtts
 
 Thanks to all community contributions!
 
