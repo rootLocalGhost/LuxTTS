@@ -1,25 +1,33 @@
 --find-links https://k2-fsa.github.io/icefall/piper_phonemize.html
 
-torch
-torchaudio
-numpy
-lhotse
-huggingface_hub
-safetensors
-tensorboard
-vocos
-pydub
-onnxruntime
+# Install Intel XPU PyTorch separately before running this file:
+# pip install torch torchaudio --index-url https://download.pytorch.org/whl/xpu
+# torch
+# torchaudio
+
+# Core ML & Hugging Face Stack (Pinned to prevent v5/v2 ABI conflicts)
+transformers==4.57.6
+huggingface-hub==0.36.2
+tokenizers==0.22.2
+safetensors==0.8.0
+onnxruntime==1.32.0
+
+# Web UI (5.50.0 is the final 5.x release compatible with huggingface-hub<1.0)
+gradio==5.50.0
+
+# Audio & Codec Processing
+numpy==2.5.5
+lhotse==1.33.0
+librosa==0.11.0
+vocos==0.1.0
+pydub==0.25.1
+tensorboard>=2.18.0
 git+https://github.com/ysharma3501/LinaCodec.git
-librosa
-transformers<=4.57.6
 
-# Normalization
-cn2an
-inflect
-
-# Tokenization
-jieba
-piper_phonemize
-pypinyin
+# Text Normalization & Tokenization
+cn2an==0.5.22
+inflect==7.5.0
+jieba==0.42.1
+piper-phonemize>=1.2.0
+pypinyin==0.50.0
 setuptools<81

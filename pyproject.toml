@@ -3,36 +3,38 @@ name = "Zipvoice"
 version = "0.0.11"
 description = "Linacodec is a highly compressive and rapid audio tokenizer for audio models."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.14"
 dependencies = [
-  "cn2an",
-  "huggingface-hub",
-  "inflect",
-  "jieba",
-  "lhotse",
-  "librosa",
+  "cn2an==0.5.22",
+  "gradio==5.50.0",
+  "huggingface-hub==0.36.2",
+  "inflect==7.5.0",
+  "jieba==0.42.1",
+  "lhotse==1.33.0",
+  "librosa==0.11.0",
   "linacodec",
-  "numpy",
-  "onnxruntime",
-  "piper-phonemize",
-  "pydub",
-  "pypinyin",
-  "safetensors",
+  "numpy==2.5.5",
+  "onnxruntime==1.32.0",
+  "piper-phonemize>=1.2.0",
+  "pydub==0.25.1",
+  "pypinyin==0.50.0",
+  "safetensors==0.8.0",
   "setuptools<81",
-  "tensorboard",
+  "tensorboard>=2.18.0",
+  "tokenizers==0.22.2",
   "torch",
   "torchaudio",
-  "transformers<=4.57.6",
-  "vocos",
+  "transformers==4.57.6",
+  "vocos==0.1.0",
 ]
 
 [project.optional-dependencies]
 train = [
-  "einops",
+  "einops>=0.8.1",
 ]
 
 [build-system]
-requires = ["uv_build>=0.9.6,<0.10.0"]
+requires = ["uv_build>=0.9.6"]
 build-backend = "uv_build"
 
 [tool.ruff]
@@ -45,4 +47,4 @@ find-links = ["https://k2-fsa.github.io/icefall/piper_phonemize.html"]
 linacodec = { git = "https://github.com/ysharma3501/LinaCodec.git" }
 
 [tool.uv.build-backend]
-module-root = "" # The root module of the project
+module-root = ""
